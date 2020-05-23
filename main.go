@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"net/http"
-
+	// "io"
+	"io/ioutil"
+	"bytes"
+	// "net/http"
 	"golang.org/x/net/html"
 )
 
@@ -12,15 +13,17 @@ type challenge struct {
 	link string
 	name string
 }
-
+var tabs int =0
 func main() {
 	getChllanges()
 }
 
-func getPage() io.ReadCloser {
-	resp, _ := http.Get("https://www.hackerearth.com/challenges/")
-	// file,_ :=
-	return resp.Body
+func getPage() *bytes.Reader {
+	//resp, _ := http.Get("https://www.hackerearth.com/challenges/")
+	dat, _ := ioutil.ReadFile("template.html")
+	//file,_ :=
+	// return resp.Body
+	return bytes.NewReader(dat)
 }
 
 func bfs(n *html.Node) {
@@ -28,11 +31,18 @@ func bfs(n *html.Node) {
 		return
 	}
 	t := n.FirstChild
+	tabs = tabs +1
 	for t != nil {
-		fmt.Print(t.Data + " ")
+		for i := 0; i < tabs; i++ { 
+			fmt.Print("\t")
+		}
+
+		fmt.Println(t.Data)
 		bfs(t)
 		t = t.NextSibling
+
 	}
+	tabs = tabs -1
 }
 
 func getChllanges() []challenge {
