@@ -18,8 +18,8 @@ func main() {
 }
 
 func getPage() io.ReadCloser {
-	// resp, _ := http.Get("https://www.hackerearth.com/challenges/")
-	file,_ := 
+	resp, _ := http.Get("https://www.hackerearth.com/challenges/")
+	// file,_ :=
 	return resp.Body
 }
 
