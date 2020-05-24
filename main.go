@@ -2,52 +2,85 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"net/http"
+
 	// "io"
-	"io/ioutil"
-	"bytes"
+
 	// "net/http"
 	"golang.org/x/net/html"
+	"golang.org/x/net/html/atom"
 )
 
 type challenge struct {
 	link string
 	name string
 }
-var tabs int =0
+
+var tabs int
+
 func main() {
+	tabs = 0
 	getChllanges()
 }
 
-func getPage() *bytes.Reader {
-	//resp, _ := http.Get("https://www.hackerearth.com/challenges/")
-	dat, _ := ioutil.ReadFile("template.html")
-	//file,_ :=
-	// return resp.Body
-	return bytes.NewReader(dat)
+func getPage() io.ReadCloser {
+	resp, _ := http.Get("https://www.hackerearth.com/challenges/")
+	// dat, _ := ioutil.ReadFile("template.html")
+	// file,_ :=
+	return resp.Body
+	// return bytes.NewReader(dat)
 }
 
-func bfs(n *html.Node) {
+// func getPage() *bytes.Reader {
+// 	// resp, _ := http.Get("https://www.hackerearth.com/challenges/")
+// 	dat, _ := ioutil.ReadFile("template.html")
+// 	return bytes.NewReader(dat)
+// }
+
+func bfs(n *html.Node) *html.Node {
 	if n == nil {
-		return
+		return nil
 	}
 	t := n.FirstChild
-	tabs = tabs +1
 	for t != nil {
-		for i := 0; i < tabs; i++ { 
-			fmt.Print("\t")
+		if t.DataAtom == atom.Div {
+			for j := 0; j < len(t.Attr); j++ {
+				if t.Attr[j].Key == "class" && t.Attr[j].Val == "ongoing challenge-list" {
+					return t
+				}
+			}
 		}
-
-		fmt.Println(t.Data)
-		bfs(t)
+		if bfs(t) != nil {
+			return bfs(t)
+		}
 		t = t.NextSibling
-
 	}
-	tabs = tabs -1
+	return nil
+}
+
+func getChallenge(n *html.Node) challenge {
+	var chal challenge
+	chal.link = n.Attr[2].Val
+	chal.name = n.FirstChild.NextSibling.FirstChild.NextSibling.Attr[1].Val
+	return chal
 }
 
 func getChllanges() []challenge {
 	htm, _ := html.Parse(getPage())
-	challenges := make([]challenge, 10)
-	bfs(htm)
+	challenges := make([]challenge, 0)
+	challengesNode := bfs(htm)
+	t := challengesNode.FirstChild
+	for t != nil {
+		if len(t.Attr) != 0 && t.Attr[0].Key == "class" && t.Attr[0].Val == "challenge-card-modern" {
+			// fmt.Println(t.FirstChild.NextSibling.Attr)
+			challenges = append(challenges, getChallenge(t.FirstChild.NextSibling))
+		}
+		t = t.NextSibling
+	}
+	for _, ch := range challenges {
+		fmt.Println(ch.name + " : " + ch.link + " | ")
+	}
+
 	return challenges
 }
