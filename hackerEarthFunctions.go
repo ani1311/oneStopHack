@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"unicode"
+
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -12,7 +15,13 @@ func getChllanges() []Challenge {
 	t := challengesNode.FirstChild
 	for t != nil {
 		if len(t.Attr) != 0 && t.Attr[0].Key == "class" && t.Attr[0].Val == "challenge-card-modern" {
-			challenges = append(challenges, getChallenge(t.FirstChild.NextSibling))
+			chal, err := getChallenge(t.FirstChild.NextSibling)
+			if err != nil {
+				fmt.Println("challenge skipped")
+			} else {
+				challenges = append(challenges, chal)
+
+			}
 		}
 		t = t.NextSibling
 	}
@@ -23,9 +32,12 @@ func getChllanges() []Challenge {
 	return challenges
 }
 
-func getChallenge(n *html.Node) Challenge {
+func getChallenge(n *html.Node) (Challenge, error) {
 	var chal Challenge
 	chal.Link = n.Attr[2].Val
 	chal.Name = n.FirstChild.NextSibling.FirstChild.NextSibling.Attr[1].Val
-	return chal
+	if unicode.IsLower(rune(chal.Name[0])) {
+		return chal, fmt.Errorf("BAD")
+	}
+	return chal, nil
 }

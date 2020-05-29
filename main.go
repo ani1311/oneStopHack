@@ -1,10 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
+	"text/template"
 )
+
+type Data struct {
+	Challenges []Challenge
+}
 
 func main() {
 	http.HandleFunc("/AllChallenges", allChallenges)
@@ -13,9 +17,13 @@ func main() {
 
 func allChallenges(w http.ResponseWriter, r *http.Request) {
 	challenges := getChllanges()
-	for _, challange := range challenges {
-		chal, _ := json.Marshal(challange)
-		fmt.Println(string(chal))
-		fmt.Fprintln(w, string(chal))
+	data := Data{Challenges: challenges}
+	t, err := template.ParseFiles("templates/allChallenges.html")
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = t.Execute(w, data)
+	if err != nil {
+		fmt.Println(err)
 	}
 }

@@ -1,0 +1,28 @@
+<h1>One Stop Hack</h1>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+}
+th {
+  text-align: left;
+}
+</style>
+<table>
+    <col width="35%">
+    <col width="65%">
+    <tr>
+        <th>Name</th>
+        <th>Link</th>
+    </tr>
+
+	{{ range $elem := .Challenges}}
+    <tr>
+        <td>{{ $elem.Name }}</td>
+        <td><a href="{{ $elem.Link }}">here</a></td>
+    </tr>
+	{{ end }}
+</table>
