@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"text/template"
+	"./website/CodeChef"
 )
 
 type Data struct {
@@ -13,8 +14,9 @@ type Data struct {
 }
 
 func main() {
-	http.HandleFunc("/AllChallenges", allChallenges)
-	http.ListenAndServe(":8000", nil)
+	CodeChef.GetChallanges()
+	// http.HandleFunc("/AllChallenges", allChallenges)
+	// http.ListenAndServe(":8000", nil)
 }
 
 func allChallenges(w http.ResponseWriter, r *http.Request) {

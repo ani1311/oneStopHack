@@ -13,7 +13,7 @@ import (
 func GetChallanges() []models.Challenge {
 	htm, _ := html.Parse(utils.GetPage("https://www.hackerearth.com/challenges/"))
 	challenges := make([]models.Challenge, 0)
-	challengesNode := utils.GetChallengeNode(htm, atom.Div, "class", "ongoing challenge-list")
+	challengesNode := utils.GetChallengeNodeUsingAttrib(htm, atom.Div, "class", "ongoing challenge-list")
 	t := challengesNode.FirstChild
 	for t != nil {
 		if len(t.Attr) != 0 && t.Attr[0].Key == "class" && t.Attr[0].Val == "challenge-card-modern" {
