@@ -1,21 +1,23 @@
-package main
+package hackerEarth
 
 import (
 	"fmt"
 	"unicode"
 
+	"../../models"
+	"../../utils"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
 
-func getChllanges() []Challenge {
-	htm, _ := html.Parse(getPage("https://www.hackerearth.com/challenges/"))
-	challenges := make([]Challenge, 0)
-	challengesNode := getChallengeNode(htm, atom.Div, "class", "ongoing challenge-list")
+func GetChallanges() []models.Challenge {
+	htm, _ := html.Parse(utils.GetPage("https://www.hackerearth.com/challenges/"))
+	challenges := make([]models.Challenge, 0)
+	challengesNode := utils.GetChallengeNode(htm, atom.Div, "class", "ongoing challenge-list")
 	t := challengesNode.FirstChild
 	for t != nil {
 		if len(t.Attr) != 0 && t.Attr[0].Key == "class" && t.Attr[0].Val == "challenge-card-modern" {
-			chal, err := getChallenge(t.FirstChild.NextSibling)
+			chal, err := GetChallenge(t.FirstChild.NextSibling)
 			if err != nil {
 				fmt.Println("challenge skipped")
 			} else {
@@ -32,8 +34,8 @@ func getChllanges() []Challenge {
 	return challenges
 }
 
-func getChallenge(n *html.Node) (Challenge, error) {
-	var chal Challenge
+func GetChallenge(n *html.Node) (models.Challenge, error) {
+	var chal models.Challenge
 	chal.Link = n.Attr[2].Val
 	chal.Name = n.FirstChild.NextSibling.FirstChild.NextSibling.Attr[1].Val
 	if unicode.IsLower(rune(chal.Name[0])) {

@@ -1,13 +1,15 @@
 package main
 
 import (
+	"./models"
+	"./website/hackerEarth"
 	"fmt"
 	"net/http"
 	"text/template"
 )
 
 type Data struct {
-	Challenges []Challenge
+	Challenges []models.Challenge
 }
 
 func main() {
@@ -16,7 +18,7 @@ func main() {
 }
 
 func allChallenges(w http.ResponseWriter, r *http.Request) {
-	challenges := getChllanges()
+	challenges := hackerEarth.GetChallanges()
 	data := Data{Challenges: challenges}
 	t, err := template.ParseFiles("templates/allChallenges.html")
 	if err != nil {
