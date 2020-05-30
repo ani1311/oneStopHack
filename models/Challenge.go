@@ -1,6 +1,7 @@
 package models
 
 type Challenge struct {
-	Link string
-	Name string
+	Link    string
+	Name    string
+	Website string
 }

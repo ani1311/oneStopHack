@@ -16,14 +16,16 @@
       <div>
       <table class="table  table-striped text-black-60">
           <col width="35%">
-          <col width="65%">
+          <col width="35%">
           <tr class="bg-warning">
+              <th>Website</th>
               <th>Name</th>
               <th>Link</th>
           </tr>
 
         {{ range $elem := .Challenges}}
           <tr class="text-white-50">
+              <td>{{ $elem.Website}}</td>
               <td>{{ $elem.Name }}</td>
               <td><button onClick="window.location.href='{{ $elem.Link }}'" class="btn btn-primary btn-sm">Go to Site</button></td>
           </tr>

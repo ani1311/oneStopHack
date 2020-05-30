@@ -2,12 +2,12 @@ package utils
 
 import (
 	"bytes"
+	// "fmt"
+	"golang.org/x/net/html"
+	"golang.org/x/net/html/atom"
 	"io"
 	"io/ioutil"
 	"net/http"
-	"fmt"
-	"golang.org/x/net/html"
-	"golang.org/x/net/html/atom"
 )
 
 func GetPage(page string) io.ReadCloser {
@@ -46,11 +46,10 @@ func GetChallengeNodeUsingAtom(n *html.Node, atomType atom.Atom, tagVal string) 
 	if n == nil {
 		return nil
 	}
-	fmt.Println(n.Data)
 	t := n.FirstChild
 	for t != nil {
-		if t.DataAtom == atomType && t.Data== tagVal {
-			return t	
+		if t.DataAtom == atomType && t.FirstChild.Data == tagVal {
+			return t
 		}
 		chalNode := GetChallengeNodeUsingAtom(t, atomType, tagVal)
 		if chalNode != nil {

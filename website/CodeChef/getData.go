@@ -2,7 +2,6 @@ package CodeChef
 
 import (
 	"fmt"
-	"unicode"
 
 	"../../models"
 	"../../utils"
@@ -14,33 +13,32 @@ func GetChallanges() []models.Challenge {
 	htm, _ := html.Parse(utils.GetPage("https://www.codechef.com/contests"))
 	challenges := make([]models.Challenge, 0)
 	challengesNode := utils.GetChallengeNodeUsingAtom(htm, atom.H3, "Present Contests")
-	fmt.Println(challengesNode.Data)
-	// t := challengesNode.FirstChild
-	// for t != nil {
-	// 	if len(t.Attr) != 0 && t.Attr[0].Key == "class" && t.Attr[0].Val == "challenge-card-modern" {
-	// 		chal, err := GetChallenge(t.FirstChild.NextSibling)
-	// 		if err != nil {
-	// 			fmt.Println("challenge skipped")
-	// 		} else {
-	// 			challenges = append(challenges, chal)
 
-	// 		}
-	// 	}
-	// 	t = t.NextSibling
+	t := challengesNode.NextSibling.NextSibling.FirstChild.NextSibling.FirstChild.NextSibling.NextSibling.NextSibling.FirstChild.NextSibling
+	for t.DataAtom == atom.Tr {
+		chal, err := GetChallenge(t)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			challenges = append(challenges, chal)
+		}
+		t = t.NextSibling
+		if t.NextSibling != nil {
+			t = t.NextSibling
+		}
+	}
+	// for _, ch := range challenges {
+	// 	fmt.Println(ch.Name + " : " + ch.Link + " | ")
 	// }
-	// // for _, ch := range challenges {
-	// // 	fmt.Println(ch.name + " : " + ch.link + " | ")
-	// // }
 
 	return challenges
 }
 
 func GetChallenge(n *html.Node) (models.Challenge, error) {
 	var chal models.Challenge
-	chal.Link = n.Attr[2].Val
-	chal.Name = n.FirstChild.NextSibling.FirstChild.NextSibling.Attr[1].Val
-	if unicode.IsLower(rune(chal.Name[0])) {
-		return chal, fmt.Errorf("BAD")
-	}
+	chal.Website = "CodeChef"
+	chal.Link = "https://www.codechef.com" + n.FirstChild.NextSibling.NextSibling.NextSibling.FirstChild.NextSibling.Attr[0].Val
+	chal.Name = n.FirstChild.NextSibling.NextSibling.NextSibling.FirstChild.NextSibling.FirstChild.Data
+
 	return chal, nil
 }
