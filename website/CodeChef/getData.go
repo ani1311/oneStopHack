@@ -5,6 +5,7 @@ import (
 
 	"../../models"
 	"../../utils"
+	"../../websiteData"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -36,7 +37,7 @@ func GetChallanges() []models.Challenge {
 
 func GetChallenge(n *html.Node) (models.Challenge, error) {
 	var chal models.Challenge
-	chal.Website = "CodeChef"
+	chal.Website = websiteData.CodeChef
 	chal.Link = "https://www.codechef.com" + n.FirstChild.NextSibling.NextSibling.NextSibling.FirstChild.NextSibling.Attr[0].Val
 	chal.Name = n.FirstChild.NextSibling.NextSibling.NextSibling.FirstChild.NextSibling.FirstChild.Data
 

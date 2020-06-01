@@ -6,6 +6,7 @@ import (
 
 	"../../models"
 	"../../utils"
+	"../../websiteData"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -36,7 +37,7 @@ func GetChallanges() []models.Challenge {
 
 func GetChallenge(n *html.Node) (models.Challenge, error) {
 	var chal models.Challenge
-	chal.Website = "HackerEarth"
+	chal.Website = websiteData.HackerEarth
 	chal.Link = n.Attr[2].Val
 	chal.Name = n.FirstChild.NextSibling.FirstChild.NextSibling.Attr[1].Val
 	if unicode.IsLower(rune(chal.Name[0])) {
