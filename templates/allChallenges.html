@@ -11,47 +11,53 @@
   </head>
 
   <body class="text-white-50 bg-dark">
-    <div class="container">
-      <h1 class="h1">One Stop Hack</h1>
-      <div>
-      <table class="table  table-striped text-black-60">
-          <col width="35%">
-          <col width="35%">
-          <tr class="bg-warning">
-              <th>Website</th>
-              <th>Name</th>
-              <th>Link</th>
-          </tr>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <!-- Brand -->
+      <a class="navbar-brand" href="#">One Stop Hack</a>
 
-        {{ range $elem := .Challenges}}
-          <tr class="text-white-50">
-              <td>{{ $elem.Website}}</td>
-              <td>{{ $elem.Name }}</td>
-              <td><button onClick="window.location.href='{{ $elem.Link }}'" class="btn btn-primary btn-sm">Go to Site</button></td>
-          </tr>
-        {{ end }}
-      </table>
-    </div>
+      <!-- Links -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link 1</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link 2</a>
+        </li>
+
+        <!-- Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            Dropdown link
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Link 1</a>
+            <a class="dropdown-item" href="#">Link 2</a>
+            <a class="dropdown-item" href="#">Link 3</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+    <div class="container">
+      <!-- <h1 class="h1">One Stop Hack</h1> -->
+      <div>
+        <table class="table  table-striped text-black-60">
+            <col width="35%">
+            <col width="35%">
+            <tr class="bg-warning">
+                <th>Website</th>
+                <th>Name</th>
+                <th>Link</th>
+            </tr>
+
+          {{ range $elem := .Challenges}}
+            <tr class="text-white-50">
+                <td>{{ $elem.Website}}</td>
+                <td>{{ $elem.Name }}</td>
+                <td><button onClick="window.location.href='{{ $elem.Link }}'" class="btn btn-primary btn-sm">Go to Site</button></td>
+            </tr>
+          {{ end }}
+        </table>
+      </div>
     </div>
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
