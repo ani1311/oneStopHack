@@ -18,6 +18,7 @@ var challangeFile = "challenges.json"
 
 type Data struct {
 	Challenges []models.Challenge
+	Websites   []websiteData.Website
 }
 
 func main() {
@@ -34,7 +35,7 @@ func checkAndUpdateChallenges() {
 	}
 	challenges := hackerEarth.GetChallanges()
 	challenges = append(challenges, CodeChef.GetChallanges()...)
-	data := Data{Challenges: challenges}
+	data := Data{Challenges: challenges, Websites: websiteData.Websites}
 	dataJson, _ := json.Marshal(data)
 	ioutil.WriteFile(challangeFile, dataJson, 7777)
 }
@@ -66,6 +67,7 @@ func getChallengesOf(ws websiteData.Website) Data {
 			data.Challenges = append(data.Challenges, chal)
 		}
 	}
+	data.Websites = tempData.Websites
 
 	return data
 }
